@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- id를 통해서 변수값 선언 class를 통해서 해당 객체에 접근 -->
+	<bean id="getsum" class="com.khie.di01.GetSum" />
+	
+	<bean id="mysum" class="com.khie.di01.MyGetSum">
+		<!-- 프로퍼티를 통해서 setter에 값을 저장  -->
+		<property name="su1" value="200"/>
+		<property name="su2" value="100"/>
+		<property name="getSum">
+			<ref bean="getsum"/> <!-- 래퍼런스로 참조하여 getsum을 가져옴  -->
+		</property>
+	</bean>
+</beans>
