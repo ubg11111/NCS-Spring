@@ -82,32 +82,148 @@ public class ProductDAOImpl implements ProductDAO{
 
 	@Override
 	public ProductDTO getProductCont(int pnum) {
-		// TODO Auto-generated method stub
-		return null;
+	
+		sql = "select * from Products where pnum = ?";
+		
+		return this.template.queryForObject(sql, new RowMapper<ProductDTO>() {
+
+			@Override
+			public ProductDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+			
+				ProductDTO dto = new ProductDTO();
+				
+				dto.setPnum(rs.getInt("pnum"));
+				dto.setCategory_fk(rs.getString("category_fk"));
+				dto.setCategory_name(rs.getString("category_name"));
+				dto.setEp_code_fk(rs.getString("ep_code_fk"));
+				dto.setInput_price(rs.getInt("input_price"));
+				dto.setOutput_price(rs.getInt("output_price"));
+				dto.setTrans_cost(rs.getInt("trans_cost"));
+				dto.setMileage(rs.getInt("mailge"));
+				dto.setCompany(rs.getString("company"));
+				
+				return dto;
+			
+			}
+		},pnum);
 	}
 
 	@Override
-	public int updateProduct(ProductDTO dto) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updateProduct(final ProductDTO dto) {
+		
+		sql = "update products set input_price = ?, "
+				+ " output_price = ? , trans_cost = ?, "
+				+ " mailge = ?, company = ? where pnum = ?";
+		
+		return this.template.update(sql, new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				
+				
+				ps.setInt(1, dto.getInput_price());
+				ps.setInt(2, dto.getOutput_price());
+				ps.setInt(3, dto.getTrans_cost());
+				ps.setInt(4, dto.getMileage());
+				ps.setString(5, dto.getCompany());
+				ps.setInt(6, dto.getPnum());
+				
+			}
+		});
 	}
 
 	@Override
-	public int deleteProduct(int pnum) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteProduct(final int pnum) {
+		
+		sql = "delete from products where pnum = ?";
+		
+		return this.template.update(sql, new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				
+				ps.setInt(1, pnum);
+				
+				
+			}
+		});
+	
 	}
 
 	@Override
-	public void updateSeq(int pnum) {
-		// TODO Auto-generated method stub
+	public void updateSeq(final int pnum) {
+		sql = "update products set pnum = pnum - 1"
+				+ " where pnum > ?";
+		
+		this.template.update(sql, new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, pnum);
+			}
+		});
 		
 	}
 
 	@Override
 	public List<ProductDTO> searchProduct(String field, String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<ProductDTO> searchlist = null;
+		
+		if(field.equals("category_name")) {
+			
+			sql = "select * from products where category_name like ? order by pnum desc";
+			
+			searchlist =  this.template.query(sql, new RowMapper<ProductDTO>() {
+
+				@Override
+				public ProductDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+					
+					ProductDTO dto = new ProductDTO();
+					
+					dto.setPnum(rs.getInt("pnum"));
+					dto.setCategory_fk(rs.getString("category_fk"));
+					dto.setCategory_name(rs.getString("category_name"));
+					dto.setEp_code_fk(rs.getString("ep_code_fk"));
+					dto.setInput_price(rs.getInt("input_price"));
+					dto.setOutput_price(rs.getInt("output_price"));
+					dto.setTrans_cost(rs.getInt("trans_cost"));
+					dto.setMileage(rs.getInt("mailge"));
+					dto.setCompany(rs.getString("company"));
+					
+					return dto;
+				
+				}
+				
+			}, "%"+keyword+"%");
+			
+		}else if(field.equals("company")) {
+			
+			sql = "select * from products where company like ? order by pnum desc";
+			
+			searchlist = this.template.query(sql, new RowMapper<ProductDTO>() {
+
+				@Override
+				public ProductDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				
+					ProductDTO dto = new ProductDTO();
+					
+					dto.setPnum(rs.getInt("pnum"));
+					dto.setCategory_fk(rs.getString("category_fk"));
+					dto.setCategory_name(rs.getString("category_name"));
+					dto.setEp_code_fk(rs.getString("ep_code_fk"));
+					dto.setInput_price(rs.getInt("input_price"));
+					dto.setOutput_price(rs.getInt("output_price"));
+					dto.setTrans_cost(rs.getInt("trans_cost"));
+					dto.setMileage(rs.getInt("mailge"));
+					dto.setCompany(rs.getString("company"));
+					
+					return dto;
+				
+				}
+			}, "%"+keyword+"%");
+		}
+		return searchlist;
 	}
 
 	@Override

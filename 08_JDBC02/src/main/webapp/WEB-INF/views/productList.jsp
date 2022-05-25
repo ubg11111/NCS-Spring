@@ -32,7 +32,7 @@
 					<tr>
 						<td>${dto.getPnum() }</td>
 						<td>
-						<a href="<%=request.getContextPath()%>/product-content.do?pnum=${dto.getPnum()}">
+						<a href="<%=request.getContextPath()%>/product_content.do?pnum=${dto.getPnum()}">
 							${dto.getCategory_name() }</a>
 						</td>
 						<td><fmt:formatNumber value="${dto.getOutput_price() }"/>원</td>
@@ -56,9 +56,24 @@
 						onclick="location.href='product_insert.do'">
 				<td>
 			</tr>
-
+			
+			
+			
 		</table>
 		
+		
+		<br>
+		
+		<form method="post" action="<%=request.getContextPath()%>/products_search.do">
+			<select name="field">
+				<option value="category_name">제품명</option>
+				<option value="company">제조사</option>
+			</select>
+			
+			<input type="text" name="keyword">&nbsp;&nbsp;
+			<input type="submit" value="검색">
+			
+		</form>		
 		
 		
 	</div>

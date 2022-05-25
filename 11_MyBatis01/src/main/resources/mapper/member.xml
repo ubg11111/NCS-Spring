@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- DTD(Document Type Definition) : 
+	작성한 문서가 어떤 문서인지에 대해서 정의하는 것.  
+	하나의 시스템 내에서 사용할 XML 데이터의 구조를 정의하여 유효성을 점검시 사용함.
+	
+	-->
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    
+<!-- namespace 명은 패키지명을 포함해서 DAO 인터페이스 이름으로 작성하는 것이 관례. 
+	 namespace 명은 mapper 들을 구분하는데 식별자로 사용됨.
+-->
+ <mapper namespace="com.spring.model.MemberDAO">
+ 
+ 
+ 	<select id="all" resultType="com.spring.model.MemberDTO">
+		select * from member10 order by num desc 	
+ 	</select>
+ 	
+ 	<!-- insert문은 #{}을 통해 벨류값을 넣어준다 -->
+ 	<insert id="add" parameterType="com.spring.model.MemberDTO">
+ 		insert into member10 values((select max(num) from member10) + 1,
+ 		#{memid},#{memname},#{pwd},#{age},#{mileage},#{job},#{addr}, sysdate)
+ 	</insert>
+ 	
+ 	<select id="content" parameterType="int" resultType="com.spring.model.MemberDTO">
+ 		select * from member10 where num = #{num}
+ 	</select>
+ 	
+ 	<update id="update" parameterType="com.spring.model.MemberDTO">
+ 		update member10 set pwd = #{pwd}, age = #{age}, mileage = ${mileage}, job = #{job}, addr = #{addr} 
+ 		where num = #{num}
+ 	</update>
+ 	
+ 	<update id="updateSeq" parameterType="int">
+ 		update member10 set num = num - 1 where num > #{num}
+ 	</update>
+ 	
+ 	<delete id="delete" parameterType="int">
+		delete member10 where num = #{num} 		
+ 	</delete>
+ 	
+ 	
+ </mapper>

@@ -91,9 +91,6 @@
 						onclick="location.href='member_list.do'">	
 						
 				</td>
-				
-				
-				
 			</tr>
 			
 			
